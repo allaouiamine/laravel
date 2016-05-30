@@ -10,7 +10,7 @@ RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" &&
 	php composer-setup.php && \
 	php -r "unlink('composer-setup.php');" && \
 	mv composer.phar /usr/local/bin/composer && \
-	composer global require "laravel/installer" && \
+	#composer global require "laravel/installer" && \
 	rm -rf /etc/apache2/conf.d/ssl.conf && \
 	mkdir -p /run/apache2
 ADD config/httpd-laravel.conf /etc/apache2/conf.d/httpd-laravel.conf
