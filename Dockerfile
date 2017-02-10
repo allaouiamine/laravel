@@ -12,7 +12,6 @@ RUN EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig) 
 	php composer-setup.php --quiet && \
 	rm -rf composer-setup.php && \
 	mv composer.phar /usr/local/bin/composer
-RUN	composer update
 RUN	mkdir -p /run/apache2
 ADD config/httpd-laravel.conf /etc/apache2/conf.d/httpd-laravel.conf
 ADD config/entrypoint.sh entrypoint.sh
