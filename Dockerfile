@@ -1,18 +1,19 @@
 FROM alpine
 RUN apk update && \
 	apk upgrade && \
-	apk add apache2 apache2-ssl php-apache2 && \
-	apk add php php-openssl php-pdo php-dom php-opcache php-xml php-json php-phar php-pear php-zip php-mysql php-pgsql ca-certificates && \
+	apk add apache2 apache2-ssl php5-apache2 wget && \
+	apk add php5 php5-openssl php5-pdo php5-dom php5-opcache php5-xml php5-json php5-phar php5-pear php5-zip php5-mysql php5-pgsql ca-certificates && \
 	rm /var/cache/apk/*
 WORKDIR /var/www/html
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
-	php -r "if (hash_file('SHA384', 'composer-setup.php') === '92102166af5abdb03f49ce52a40591073a7b859a86e8ff13338cf7db58a19f7844fbc0bb79b2773bf30791e935dbd938') { echo 'Installer verified'; } else { echo 'Installer corrupt'; unlink('composer-setup.php'); } echo PHP_EOL;" && \
-	php composer-setup.php && \
-	php -r "unlink('composer-setup.php');" && \
-	mv composer.phar /usr/local/bin/composer && \
-	#composer global require "laravel/installer" && \
-	rm -rf /etc/apache2/conf.d/ssl.conf && \
-	mkdir -p /run/apache2
+RUN EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig) && \
+	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
+	ACTUAL_SIGNATURE=$(php -r "echo hash_file('SHA384', 'composer-setup.php');") && \
+	[ "$EXPECTED_SIGNATURE" == "$ACTUAL_SIGNATURE" ] && \
+	php composer-setup.php --quiet && \
+	rm -rf composer-setup.php && \
+	mv composer.phar /usr/local/bin/composer
+RUN	composer update
+RUN	mkdir -p /run/apache2
 ADD config/httpd-laravel.conf /etc/apache2/conf.d/httpd-laravel.conf
 ADD config/entrypoint.sh entrypoint.sh
 RUN chmod u+x entrypoint.sh
