@@ -1,10 +1,12 @@
 FROM alpine
-RUN adduser -h /var/www/html -s /sbin/nologin -S -D -H -u 100000 apache
+RUN addgroup -g 100000 apache
+RUN adduser i -G apache -h /var/www/html -s /sbin/nologin -S -D -H -u 100000 apache
 RUN apk update && \
 	apk upgrade && \
 	apk add apache2 apache2-ssl php5-apache2 wget && \
 	apk add php5 php5-openssl php5-pdo php5-dom php5-opcache php5-xml php5-json php5-phar php5-pear php5-zip php5-mysql php5-pgsql ca-certificates && \
 	rm /var/cache/apk/*
+RUN	mkdir /var/www/html
 WORKDIR /var/www/html
 RUN EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig) && \
 	php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" && \
