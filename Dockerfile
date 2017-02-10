@@ -1,6 +1,6 @@
 FROM alpine
 RUN addgroup -g 100000 apache
-RUN adduser i -G apache -h /var/www/html -s /sbin/nologin -S -D -H -u 100000 apache
+RUN adduser -G apache -h /var/www/html -s /sbin/nologin -S -D -H -u 100000 apache
 RUN apk update && \
 	apk upgrade && \
 	apk add apache2 apache2-ssl php5-apache2 wget && \
