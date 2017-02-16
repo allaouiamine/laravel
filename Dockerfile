@@ -4,7 +4,7 @@ RUN adduser -G apache -h /var/www/html -s /sbin/nologin -S -D -H -u 100000 apach
 RUN apk update && \
 	apk upgrade && \
 	apk add apache2 apache2-ssl php5-apache2 wget && \
-	apk add git php5 php5-openssl php5-pdo php5-dom php5-opcache php5-xml php5-json php5-phar php5-pear php5-zip php5-mysql php5-pgsql ca-certificates && \
+	apk add git mariadb-clients php5 php5-openssl php5-pdo php5-dom php5-opcache php5-xml php5-json php5-phar php5-pear php5-zip php5-mysql php5-pgsql ca-certificates && \
 	rm /var/cache/apk/*
 RUN	mkdir /var/www/html
 WORKDIR /var/www/html
@@ -17,9 +17,7 @@ RUN EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig) 
 	mv composer.phar /usr/local/bin/composer
 RUN	mkdir -p /run/apache2
 ADD config/httpd-laravel.conf /etc/apache2/conf.d/httpd-laravel.conf
-ADD config/getCode.sh getCode.sh
 ADD config/entrypoint.sh entrypoint.sh
 RUN chmod u+x entrypoint.sh
-RUN chmod u+x getCode.sh
 EXPOSE 80
 ENTRYPOINT ["./entrypoint.sh"]
