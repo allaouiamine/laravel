@@ -4,7 +4,7 @@ RUN adduser -G apache -h /var/www/html -s /sbin/nologin -S -D -H -u 100000 apach
 RUN apk update && \
 	apk upgrade && \
 	apk add apache2 apache2-ssl php5-apache2 wget && \
-	apk add php5 php5-openssl php5-pdo php5-dom php5-opcache php5-xml php5-json php5-phar php5-pear php5-zip php5-mysql php5-pgsql ca-certificates && \
+	apk add git php5 php5-openssl php5-pdo php5-dom php5-opcache php5-xml php5-json php5-phar php5-pear php5-zip php5-mysql php5-pgsql ca-certificates && \
 	rm /var/cache/apk/*
 RUN	mkdir /var/www/html
 WORKDIR /var/www/html
