@@ -4,6 +4,10 @@ if [ -f /var/www/html/app/composer.json ]
 then
   cd app 
   composer update
+else
+  composer create-project --prefer-dist laravel/laravel app
+  cd app
+  composer require barryvdh/laravel-debugbar
 fi
 chown -R apache:apache /var/www/html 
 chmod -R 550 /var/www/html/
