@@ -17,7 +17,9 @@ RUN EXPECTED_SIGNATURE=$(wget -q -O - https://composer.github.io/installer.sig) 
 	mv composer.phar /usr/local/bin/composer
 RUN	mkdir -p /run/apache2
 ADD config/httpd-laravel.conf /etc/apache2/conf.d/httpd-laravel.conf
+ADD config/getCode.sh getCode.sh
 ADD config/entrypoint.sh entrypoint.sh
 RUN chmod u+x entrypoint.sh
+RUN chmod u+x getCode.sh
 EXPOSE 80
 ENTRYPOINT ["./entrypoint.sh"]
